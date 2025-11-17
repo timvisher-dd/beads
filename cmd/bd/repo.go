@@ -195,6 +195,11 @@ func getRepoConfig(ctx context.Context, store storage.Storage) (map[string]strin
 		return nil, err
 	}
 
+	// Handle empty value (key not found case)
+	if value == "" {
+		return make(map[string]string), nil
+	}
+
 	// Parse JSON map
 	repos := make(map[string]string)
 	if err := json.Unmarshal([]byte(value), &repos); err != nil {
