@@ -711,7 +711,12 @@ func (s *SQLiteStorage) UpdateIssueID(ctx context.Context, oldID, newID string, 
 	if err != nil {
 		return fmt.Errorf("failed to get connection: %w", err)
 	}
-	defer func() { _ = conn.Close() }()
+	defer func() {
+		// Re-enable foreign keys before returning connection to pool
+		// CRITICAL: PRAGMA settings persist on pooled connections in database/sql
+		_, _ = conn.ExecContext(ctx, `PRAGMA foreign_keys = ON`)
+		_ = conn.Close()
+	}()
 
 	// Disable foreign keys on this specific connection
 	_, err = conn.ExecContext(ctx, `PRAGMA foreign_keys = OFF`)

@@ -46,3 +46,9 @@ issue-prefix: "bd"
 # - github.org
 # - github.repo
 # - sync.branch - Git branch for beads commits (use BEADS_SYNC_BRANCH env var or bd config set)
+
+# Routing configuration for multi-repo workflows
+routing:
+  mode: "auto"  # "auto" = route based on user role, "explicit" = always use default
+  contributor: "/Users/tim.visher/git/timvisher-dd/beads/main.beads"  # Where contributors' issues go
+  maintainer: "."  # Where maintainers' issues go (default: current repo)
